@@ -8,20 +8,6 @@ int str_to_num(string s)
     return num;
 }
 
-void printBoard(vector<vector<int>> board){
-    for(int i=0;i<boardSize;i++){
-        for(int j=0;j<boardSize;j++){
-            if(board[i][j]){
-                cout << setw(3) << board[i][j] << " ";
-            }
-            else{
-                cout << setw(3) << " *" << " ";
-            }
-        }
-        cout << endl;
-    }
-}
-
 // Takes input of the initial board
 vector<vector<int>> getInitialBoard(){
     vector<vector<int>> board(boardSize, vector<int>(boardSize,-1));
@@ -60,7 +46,7 @@ vector<vector<int>> getTargetBoard(){
     vector<vector<int>> targetBoard(boardSize, vector<int>(boardSize,-1));
     for(int i=0;i<boardSize;i++){
         for (int j=0;j<boardSize;j++){
-            targetBoard[i][j] = i*boardSize + j;
+            targetBoard[i][j] = i*boardSize + j + 1;
         }
     }
     targetBoard[boardSize-1][boardSize-1] = 0;
@@ -75,16 +61,23 @@ int main()
     }
     int n;
     file >> n;
-    boardSize = m;
+    boardSize = n;
     vector<vector<int>> board = getInitialBoard();
-    //printBoard(board,n);
+    //printBoard(board);
     if(!isPuzzleSolvable(board)){
         cout << "Can't reach target board from the given initial board!!" << endl;
         return 1;
     }
     else{
+        vector<vector<int>> targetBoard = getTargetBoard();
+        //printBoard(targetBoard);
         out << "    Using Hamming Distance Heuristics   " << endl;
         out << "----------------------------------------" << endl;
+        AStarSearch(board, targetBoard, HAMMING);
+
+        out << "    Using Manhattan Distance Heuristics   " << endl;
+        out << "----------------------------------------" << endl;
+        AStarSearch(board, targetBoard, MANHATTAN);
     }
     return 0;
 }
