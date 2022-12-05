@@ -1,9 +1,4 @@
-#include<iostream>
-#include<bits/stdc++.h>
-
-using namespace std;
-
-ifstream file("in.txt");
+#include "puzzle.h"
 
 int str_to_num(string s)
 {
@@ -13,9 +8,9 @@ int str_to_num(string s)
     return num;
 }
 
-void printBoard(vector<vector<int>> board, int n){
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
+void printBoard(vector<vector<int>> board){
+    for(int i=0;i<boardSize;i++){
+        for(int j=0;j<boardSize;j++){
             if(board[i][j]){
                 cout << setw(3) << board[i][j] << " ";
             }
@@ -28,13 +23,13 @@ void printBoard(vector<vector<int>> board, int n){
 }
 
 // Takes input of the initial board
-vector<vector<int>> getInitialBoard(int n){
-    vector<vector<int>> board(n, vector<int>(n,-1));
-    vector<bool> isEntry(n*n, false); // Checks if same input is given more than one time. By default all are set to false.
+vector<vector<int>> getInitialBoard(){
+    vector<vector<int>> board(boardSize, vector<int>(boardSize,-1));
+    vector<bool> isEntry(boardSize*boardSize, false); // Checks if same input is given more than one time. By default all are set to false.
     //string str;
     int x;
-    for(int i=0;i<n;i++){
-        for (int j=0;j<n;j++){
+    for(int i=0;i<boardSize;i++){
+        for (int j=0;j<boardSize;j++){
             /*cin >> str;
             if(str=="*"){
                 board[i][j] = 0;
@@ -49,7 +44,7 @@ vector<vector<int>> getInitialBoard(int n){
                 isEntry[x] = true;
             }*/
             file >> x;
-            if(x<0 || (x>n*n-1) || (isEntry[x])){
+            if(x<0 || (x>boardSize*boardSize-1) || (isEntry[x])){
                 cout << "Invalid input for initial board!!" << endl;
                 exit(1);
             }
@@ -61,14 +56,14 @@ vector<vector<int>> getInitialBoard(int n){
 }
 
 // Creates default target board
-vector<vector<int>> getTargetBoard(int n){
-    vector<vector<int>> targetBoard(n, vector<int>(n,-1));
-    for(int i=0;i<n;i++){
-        for (int j=0;j<n;j++){
-            targetBoard[i][j] = i*n + j;
+vector<vector<int>> getTargetBoard(){
+    vector<vector<int>> targetBoard(boardSize, vector<int>(boardSize,-1));
+    for(int i=0;i<boardSize;i++){
+        for (int j=0;j<boardSize;j++){
+            targetBoard[i][j] = i*boardSize + j;
         }
     }
-    targetBoard[n-1][n-1] = 0;
+    targetBoard[boardSize-1][boardSize-1] = 0;
     return targetBoard;
 }
 
@@ -80,7 +75,16 @@ int main()
     }
     int n;
     file >> n;
-    vector<vector<int>> board = getInitialBoard(n);
-    printBoard(board,n);
+    boardSize = m;
+    vector<vector<int>> board = getInitialBoard();
+    //printBoard(board,n);
+    if(!isPuzzleSolvable(board)){
+        cout << "Can't reach target board from the given initial board!!" << endl;
+        return 1;
+    }
+    else{
+        out << "    Using Hamming Distance Heuristics   " << endl;
+        out << "----------------------------------------" << endl;
+    }
     return 0;
 }
