@@ -20,6 +20,7 @@ private:
     int mov;
 public:
     int priority;
+    BoardNode(){}
     BoardNode(vector<vector<int>> currentBoard, vector<vector<int>> parentBoard, int mov, int p){
         this->currentNode = currentBoard;
         this->parentNode = parentBoard;
@@ -153,17 +154,40 @@ bool isPuzzleSolvable(vector<vector<int>>board){
     return false;
 }
 
+void printSolve(map<vector<vector<int>>, vector<vector<int>>> boardMap, vector<vector<int>> board){
+    vector<vector<vector<int>>> solve;
+    vector<vector<int>> bn;
+    solve.push_back(board);
+    bn = boardMap[board];
+    while(1){
+        if(bn[0][0]==-1){
+            break;
+        }
+        else{
+            solve.push_back(bn);
+            bn = boardMap[bn];
+        }
+    }
+    reverse(solve.begin(), solve.end());
+    for(auto &i:solve){
+        printBoard(i);
+    }
+}
+
 void AStarSearch(vector<vector<int>> board, vector<vector<int>> targetBoard, int type){
-    int nExpanded = 0, max_depth = 0, nPushed = 0;
+    map<vector<vector<int>>, vector<vector<int>>> boardMap;
+    int nExplored = 0, max_depth = 0, nExpended = 0;
     priority_queue<BoardNode, vector<BoardNode>, greater<BoardNode>> openList;
     vector<vector<int>>parent(boardSize,vector<int>(boardSize,-1));
     set<vector<vector<int>>>closedList;
     openList.push(BoardNode(board,parent,0,0));
+    nExpended++;
+    boardMap[board] = parent;
 
     while(!openList.empty()){
         BoardNode node = openList.top();
         openList.pop();
-        nExpanded++;
+        nExplored++;
         vector<vector<int>> currentBoard = node.getCurrentNode();
         max_depth = max(max_depth, node.getMove());
 
@@ -176,6 +200,7 @@ void AStarSearch(vector<vector<int>> board, vector<vector<int>> targetBoard, int
 
         if(isBoardsSame(currentBoard, targetBoard)){
             out << "No of Steps: " << node.getMove() << endl;
+            printSolve(boardMap, currentBoard);
             break;
         }
 
@@ -195,13 +220,14 @@ void AStarSearch(vector<vector<int>> board, vector<vector<int>> targetBoard, int
                             int h;
                             if(type == HAMMING){
                                 h = getHammingDistance(nextBoard, targetBoard);
-                                //out << "hamming dis: " << h << endl;
+                                //out << "Hamming dist: " << h << endl;
                             }
                             else{
                                 h = getManhattanDistance(nextBoard);
-                                //out << "Manhattan dis: " << h << endl;
+                                //out << "Manhattan dist: " << h << endl;
                             }
-                            nPushed++;
+                            nExpended++;
+                            boardMap[nextBoard] = currentBoard;
                             openList.push(BoardNode(nextBoard, currentBoard, node.getMove()+1, node.getMove()+1+h));
                         }
                     }
@@ -210,9 +236,11 @@ void AStarSearch(vector<vector<int>> board, vector<vector<int>> targetBoard, int
         }
     }
     //int openedCount = closedList.size();
-    out << "No of Nodes Expanded: " << nExpanded << endl;
-	out << "No of Nodes Opened: " << closedList.size() << endl;
-	out << "No of Nodes Pushed: " << nPushed << endl;
-	out << "Max Depth Reached: " << max_depth << endl;
+    out << "No of Nodes Explored: " << nExplored << endl;
+	//out << "No of Nodes Opened: " << closedList.size() << endl;
+	out << "No of Nodes Expended: " << nExpended << endl;
+	//out << "Max Depth Reached: " << max_depth << endl;
+	out << "****************END***************" << endl;
+	out << endl;
 	out << endl;
 }

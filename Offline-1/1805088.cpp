@@ -12,23 +12,9 @@ int str_to_num(string s)
 vector<vector<int>> getInitialBoard(){
     vector<vector<int>> board(boardSize, vector<int>(boardSize,-1));
     vector<bool> isEntry(boardSize*boardSize, false); // Checks if same input is given more than one time. By default all are set to false.
-    //string str;
     int x;
     for(int i=0;i<boardSize;i++){
         for (int j=0;j<boardSize;j++){
-            /*cin >> str;
-            if(str=="*"){
-                board[i][j] = 0;
-            }
-            else{
-                int x = str_to_num(str);
-                if(x<=0 || (x>n*n-1) || (isEntry[x])){
-                    cout << "Invalid input for initial board!!" << endl;
-                    exit(1);
-                }
-                board[i][j] = x;
-                isEntry[x] = true;
-            }*/
             file >> x;
             if(x<0 || (x>boardSize*boardSize-1) || (isEntry[x])){
                 cout << "Invalid input for initial board!!" << endl;
@@ -69,6 +55,8 @@ int main()
         return 1;
     }
     else{
+        out << "Solvable" << endl;
+        out << endl;
         vector<vector<int>> targetBoard = getTargetBoard();
         //printBoard(targetBoard);
         out << "    Using Hamming Distance Heuristics   " << endl;
