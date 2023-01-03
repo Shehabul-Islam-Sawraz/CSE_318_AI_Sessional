@@ -87,4 +87,13 @@ public class Cell {
         }
         return dynamicDegree;
     }
+
+    public boolean domainContains(int value){
+        for(int val : domain){
+            if(val == value){
+                return true;
+            }
+        }
+        return false;
+    }
 }

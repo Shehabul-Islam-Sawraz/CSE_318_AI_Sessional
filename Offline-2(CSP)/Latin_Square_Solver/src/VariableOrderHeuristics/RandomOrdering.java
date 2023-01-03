@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RandomOrdering implements VariableOrderHeuristics {
-
     private Random random;
 
     public RandomOrdering() {
