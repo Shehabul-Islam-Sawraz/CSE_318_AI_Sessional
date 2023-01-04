@@ -55,6 +55,14 @@ public class Cell {
         }
     }
 
+    public void removeDomainAt(int index) {
+        domain[index] = 0;
+    }
+
+    public int getDomainAt(int index) {
+        return domain[index];
+    }
+
     // Returns the size of the domain array
     public int getDomainSize(){
         return domain.length;
@@ -95,5 +103,11 @@ public class Cell {
             }
         }
         return false;
+    }
+
+    public int[] copyDomain() {
+        int[] copy = new int[domain.length];
+        System.arraycopy(domain, 0, copy, 0, copy.length);
+        return copy;
     }
 }
