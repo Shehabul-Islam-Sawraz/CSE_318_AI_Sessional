@@ -33,7 +33,10 @@ public class SolveChecker {
         return isDeleted;
     }
 
-    public static boolean doConsistencyChecking(boolean isForwardChecking, Cell variable, Cell[][] latinSquare) {
+    /*public static boolean doConsistencyChecking(boolean isForwardChecking, Cell variable, Cell[][] latinSquare) {
+        if(!isForwardChecking){
+            return true;
+        }
         LinkedList<GroupCell> queue = new LinkedList<>();
 
         int squareLen = latinSquare.length;
@@ -47,7 +50,7 @@ public class SolveChecker {
         for(int row=0; row<squareLen; row++) {
             if(!isForwardChecking && row!=variable.getCoordinate().getX() && latinSquare[row][varY].getValue()!=0) { // For backtracking
                 queue.offer(new GroupCell(latinSquare[row][varY], variable));
-            } else if(isForwardChecking && latinSquare[row][varY].getValue()==0) { // For forwardchecking
+            } else if(isForwardChecking && latinSquare[row][varY].getValue()==0) { // For forwardChecking
                 queue.offer(new GroupCell(latinSquare[row][varY], variable));
             }
         }
@@ -76,5 +79,23 @@ public class SolveChecker {
             }
         }
         return isConsistent;
+    }*/
+    public static boolean doConsistencyChecking(boolean isForwardChecking, Cell variable, Cell[][] latinSquare){
+        if(!isForwardChecking){
+            return true;
+        }
+        for(int row=0;row<latinSquare.length;row++){
+            if(latinSquare[row][variable.getCoordinate().getY()].getValue()==0 && latinSquare[row][variable.getCoordinate().getY()].getPossibleDomainSize()==0){
+                //System.out.println("false marse");
+                return false;
+            }
+        }
+        for(int col=0;col<latinSquare.length;col++){
+            if(latinSquare[variable.getCoordinate().getX()][col].getValue()==0 && latinSquare[variable.getCoordinate().getX()][col].getPossibleDomainSize()==0){
+                //System.out.println("false marse");
+                return false;
+            }
+        }
+        return true;
     }
 }

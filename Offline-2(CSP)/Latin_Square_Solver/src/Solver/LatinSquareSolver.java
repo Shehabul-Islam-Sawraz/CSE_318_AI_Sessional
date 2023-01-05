@@ -24,26 +24,26 @@ public class LatinSquareSolver {
         switch (this.variableHeuristic){
             case 1:
                 SmallestDomainFirst sdf = new SmallestDomainFirst();
-                return unassignedCells.get(sdf.getNextVariable(latinSquare, unassignedCells));
+                return sdf.getNextVariable(latinSquare, unassignedCells);
             case 2:
                 MaximumDegreeFirst mdf = new MaximumDegreeFirst();
-                return unassignedCells.get(mdf.getNextVariable(latinSquare, unassignedCells));
+                return mdf.getNextVariable(latinSquare, unassignedCells);
             case 3:
                 SmallestDomainMaximumDegree sdmd = new SmallestDomainMaximumDegree();
-                return unassignedCells.get(sdmd.getNextVariable(latinSquare, unassignedCells));
+                return sdmd.getNextVariable(latinSquare, unassignedCells);
             case 4:
                 MinimumSDMDRatio minSdmd = new MinimumSDMDRatio();
-                return unassignedCells.get(minSdmd.getNextVariable(latinSquare, unassignedCells));
+                return minSdmd.getNextVariable(latinSquare, unassignedCells);
             case 5:
                 RandomOrdering random = new RandomOrdering();
-                return unassignedCells.get(random.getNextVariable(latinSquare, unassignedCells));
+                return random.getNextVariable(latinSquare, unassignedCells);
             default:
                 return null;
         }
     }
 
     private boolean chooseSolver(){
-        nodeVisited = 1;
+        nodeVisited = 0;
         backtracks = 0;
         switch (this.typeOfChecking){
             case 1:
@@ -60,11 +60,17 @@ public class LatinSquareSolver {
     }
 
     private boolean backtracking(boolean isForwardChecking) {
+        nodeVisited++;
+
+//        System.out.println("-------------------");
+//        printResult();
+//        System.out.println("-------------------");
         boolean isSolved = true;
         // Checking whether all unassigned cells have got value. If yes, then solved, else not.
         for(Cell cell: unassignedCells) {
-            if(cell.getValue() == 0) {
+            if(cell.getValue() == 0) { // Unassigned cell remaining
                 isSolved = false;
+                //backtracks++;
                 break;
             }
         }
@@ -73,6 +79,21 @@ public class LatinSquareSolver {
         }
 
         Cell variable = getNextVariable(); // Get the next variable using heuristic
+        if (variable==null){
+            //System.out.println("Variable pay nai");
+            //backtracks++;
+            return false;
+        }
+//        if(!isForwardChecking){
+//            if(variable.getPossibleDomainSize()==0){
+//                backtracks++;
+//                return false;
+//            }
+//        }
+//        else{
+//            System.out.println("Value: " + variable.getValue());
+//            System.out.println("X: " + variable.getCoordinate().getX() + " Y: "+ variable.getCoordinate().getY());
+//        }
         int[][] domains = new int[unassignedCells.size()][];
         LeastConstraintValue leastConstraintValue = new LeastConstraintValue(latinSquare, variable, unassignedCells);
         leastConstraintValue.setVariable();
@@ -84,21 +105,33 @@ public class LatinSquareSolver {
             if(value == 0) {
                 continue;
             }
-            nodeVisited++;
+            //nodeVisited++;
             for(int j=0; j<domains.length; j++) {
                 domains[j] = unassignedCells.get(j).copyDomain();
             }
 
             if (variable != null) {
                 variable.setValue(value);
+                // Remove the assigned domain from the variable row and column's unassigned cells
+                int varX = variable.getCoordinate().getX();
+                int varY = variable.getCoordinate().getY();
+                for(int i = 0; i < latinSquare.length; i++) {
+                    if(i != varX && latinSquare[i][varY].getValue() == 0) {
+                        latinSquare[i][varY].removeFromDomain(value);
+                    }
+                    if(i != varY && latinSquare[varX][i].getValue() == 0) {
+                        latinSquare[varX][i].removeFromDomain(value);
+                    }
+                }
             }
 
             // If Latin Square is consistent with the assignment of the variable, then continue backtracking
             if(SolveChecker.doConsistencyChecking(isForwardChecking, variable, latinSquare)) {
                 isSolved = backtracking(isForwardChecking);
-            } else {
-                backtracks++;
             }
+//            } else {
+//                backtracks++;
+//            }
             if(!isSolved) {
                 variable.setValue(0); // If not solved then make the variable an unassigned cell again
                 // Reset the domains of unassigned cells with the domains before the assignment
@@ -106,6 +139,9 @@ public class LatinSquareSolver {
                     unassignedCells.get(j).setDomain(domains[j]);
                 }
             }
+        }
+        if(!isSolved){
+            backtracks++;
         }
         return isSolved;
     }
@@ -115,10 +151,20 @@ public class LatinSquareSolver {
         boolean isSolved = chooseSolver();
         runtime = System.currentTimeMillis() - runtime;
         if(isSolved){
+            //printResult();
             System.out.println("Runtime: " + runtime + "ms\nBacktracks: " + backtracks + "\nNode Visited: " + nodeVisited);
         }
         else{
             System.out.println("Latin Square couldn't be solved!!");
+        }
+    }
+
+    private void printResult() {
+        for(int i=0;i<latinSquare.length;i++){
+            for(int j=0;j<latinSquare[0].length;j++){
+                System.out.print(latinSquare[i][j].getValue()+ " ");
+            }
+            System.out.println();
         }
     }
 }

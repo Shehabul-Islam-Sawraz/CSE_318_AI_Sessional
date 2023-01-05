@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class SmallestDomainMaximumDegree implements VariableOrderHeuristics {
     @Override
-    public int getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
+    public Cell getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
         int smallestDomain = Integer.MAX_VALUE;
         int maxForwardDegree = Integer.MIN_VALUE;
         int index = -1, degree = -1;
@@ -29,6 +29,11 @@ public class SmallestDomainMaximumDegree implements VariableOrderHeuristics {
                 }
             }
         }
-        return index;
+        if(index!=-1){
+            return unassignedCells.get(index);
+        }
+        else {
+            return null;
+        }
     }
 }

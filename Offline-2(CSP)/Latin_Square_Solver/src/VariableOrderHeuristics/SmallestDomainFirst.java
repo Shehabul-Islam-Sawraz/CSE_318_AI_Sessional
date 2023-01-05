@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class SmallestDomainFirst implements VariableOrderHeuristics {
 
     @Override
-    public int getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
+    public Cell getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
         int smallestDomain = Integer.MAX_VALUE;
         int index = -1;
         int unassignedCellSize = unassignedCells.size();
@@ -21,6 +21,11 @@ public class SmallestDomainFirst implements VariableOrderHeuristics {
                 index = i;
             }
         }
-        return index;
+        if(index!=-1){
+            return unassignedCells.get(index);
+        }
+        else {
+            return null;
+        }
     }
 }

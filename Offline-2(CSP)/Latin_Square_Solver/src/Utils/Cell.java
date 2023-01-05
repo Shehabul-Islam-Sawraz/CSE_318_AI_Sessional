@@ -59,6 +59,15 @@ public class Cell {
         domain[index] = 0;
     }
 
+    public void removeFromDomain(int value){
+        for(int i=0;i<staticDegree;i++){
+            if(domain[i] == value){
+                removeDomainAt(i);
+                break;
+            }
+        }
+    }
+
     public int getDomainAt(int index) {
         return domain[index];
     }
@@ -80,7 +89,7 @@ public class Cell {
     public int getDynamicDegree(Cell[][] latinSquare){
         int rowSize = latinSquare.length;
         int colSize = latinSquare[0].length;
-        int dynamicDegree = 0;
+        int dynamicDegree = 1; // Taking initial value 1, otherwise for MinSDMDRatio, ratio becomes infinite
         // Calculating no of 0 or unassigned value in the column of current pos Y
         for(int row=0; row<rowSize; row++) {
             if(row!=coordinate.getX() && latinSquare[row][coordinate.getY()].getValue()==0) {

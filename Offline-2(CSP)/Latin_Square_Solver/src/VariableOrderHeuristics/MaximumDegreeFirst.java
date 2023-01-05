@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MaximumDegreeFirst implements VariableOrderHeuristics {
     @Override
-    public int getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
+    public Cell getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
         int maxForwardDegree = Integer.MIN_VALUE;
         int index = -1, degree = -1;
         int unassignedCellSize = unassignedCells.size();
@@ -18,6 +18,11 @@ public class MaximumDegreeFirst implements VariableOrderHeuristics {
                 index = i;
             }
         }
-        return index;
+        if(index!=-1){
+            return unassignedCells.get(index);
+        }
+        else {
+            return null;
+        }
     }
 }
