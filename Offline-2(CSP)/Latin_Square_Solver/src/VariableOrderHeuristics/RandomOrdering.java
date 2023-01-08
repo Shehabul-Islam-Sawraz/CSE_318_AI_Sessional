@@ -7,13 +7,6 @@ import java.util.Random;
 public class RandomOrdering implements VariableOrderHeuristics {
     @Override
     public Cell getNextVariable(Cell[][] latinSquare, ArrayList<Cell> unassignedCells) {
-//        System.out.println("..................................");
-//        for(int i=0;i<unassignedCells.size();i++){
-//            System.out.println("index: " + i);
-//            System.out.println("value: "+unassignedCells.get(i).getValue());
-//        }
-//        System.out.println("..................................");
-
         int index = -1;
         ArrayList<Cell> temp = new ArrayList<>(unassignedCells);
         Collections.shuffle(temp);
@@ -30,9 +23,7 @@ public class RandomOrdering implements VariableOrderHeuristics {
                 break;
             }
         }
-        //System.out.println("Index: " + index);
         if(index!=-1){
-            //System.out.println("Huh: " + unassignedCells.get(index).getValue());
             return unassignedCells.get(index);
         }
         else {

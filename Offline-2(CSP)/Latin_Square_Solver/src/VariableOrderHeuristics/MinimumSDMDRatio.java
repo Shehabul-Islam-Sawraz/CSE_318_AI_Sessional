@@ -17,13 +17,11 @@ public class MinimumSDMDRatio implements VariableOrderHeuristics {
             int domainSize = unassignedCells.get(i).getPossibleDomainSize();
             int degree = unassignedCells.get(i).getDynamicDegree(latinSquare);
             double ratio = (double) (domainSize*1.0/degree);
-            //System.out.println("Ratio: " + ratio + " \n Min ratio: " + minRatio);
             if(ratio < minRatio) {
                 minRatio = ratio;
                 index = i;
             }
         }
-        //System.out.println("Index: " + index);
         if(index!=-1){
             return unassignedCells.get(index);
         }
