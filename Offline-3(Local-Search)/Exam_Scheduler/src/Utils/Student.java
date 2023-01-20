@@ -26,4 +26,8 @@ public class Student {
     public void setEnrolledCourses(ArrayList<Course> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
     }
+
+    public void addEnrolledCourse(Course course) {
+        this.enrolledCourses.add(course);
+    }
 }
