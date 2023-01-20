@@ -10,11 +10,11 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static void scheduler(ArrayList<Course> courses, ArrayList<Student> students){
+    private static void scheduler(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic){
 
     }
 
-    private static void runInputFiles(String fileName) throws FileNotFoundException {
+    private static void runInputFiles(String fileName, int constructiveHeuristic) throws FileNotFoundException {
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList<Student> students = new ArrayList<>();
         Scanner scanner;
@@ -29,12 +29,12 @@ public class Main {
 
         /* preparing conflict matrix */
         int coursesSize = courses.size();
-        int[][] conflictMatrix = new int[coursesSize][coursesSize];
-        for(int i=0; i<coursesSize; i++) {
-            for(int j=0; j<coursesSize; j++) {
-                conflictMatrix[i][j] = 0;
-            }
-        }
+//        boolean[][] conflictMatrix = new boolean[coursesSize][coursesSize];
+//        for(int i=0; i<coursesSize; i++) {
+//            for(int j=0; j<coursesSize; j++) {
+//                conflictMatrix[i][j] = false;
+//            }
+//        }
 
         /* extracting input from .stu file */
         int student_count = 0;
@@ -58,23 +58,30 @@ public class Main {
                 int x = Integer.parseInt(temp[i]);
                 for(int j=i+1; j<tempLen; j++) {
                     int y = Integer.parseInt(temp[j]);
-                    if(conflictMatrix[x-1][y-1] == 0) {
-                        conflictMatrix[x-1][y-1] = conflictMatrix[y-1][x-1] = 1;
-
-                        courses.get(x-1).addConflictingCourse(courses.get(y-1));
-                        courses.get(y-1).addConflictingCourse(courses.get(x-1));
-                    }
+//                    if(!conflictMatrix[x - 1][y - 1]) {
+//                        conflictMatrix[x-1][y-1] = conflictMatrix[y-1][x-1] = true;
+//
+//                        courses.get(x-1).addConflictingCourse(courses.get(y-1));
+//                        courses.get(y-1).addConflictingCourse(courses.get(x-1));
+//                    }
+                    courses.get(x-1).addConflictingCourse(courses.get(y-1));
+                    courses.get(y-1).addConflictingCourse(courses.get(x-1));
                 }
             }
         }
         scanner.close();
 
         // Calling scheduler
-        scheduler(courses, students);
+        System.out.println("====================================");
+        System.out.println("For file: " + fileName);
+        scheduler(courses, students, constructiveHeuristic);
+        System.out.println("====================================\n\n");
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        runInputFiles("abc");
+        for(int constructiveHeuristic = 0; constructiveHeuristic < 4; constructiveHeuristic++){
+            runInputFiles("abc", constructiveHeuristic);
+        }
     }
 
 

@@ -7,7 +7,7 @@ public class Course {
     private int courseId;
     private int noOfStudents;
     private int timeSlot;
-    private ArrayList<Course> conflictingCourses;
+    private HashSet<Course> conflictingCourses;
     private int conflict; // This stores no of students associated with conflict for the course
     private int degreeSaturation;
 
@@ -17,7 +17,7 @@ public class Course {
         this.timeSlot = -1;
         this.conflict = 0;
         this.degreeSaturation = 0;
-        this.conflictingCourses = new ArrayList<>();
+        this.conflictingCourses = new HashSet<>();
     }
 
     public int getCourseId() {
@@ -44,11 +44,11 @@ public class Course {
         this.timeSlot = timeSlot;
     }
 
-    public ArrayList<Course> getConflictingCourses() {
+    public HashSet<Course> getConflictingCourses() {
         return conflictingCourses;
     }
 
-    public void setConflictingCourses(ArrayList<Course> conflictingCourses) {
+    public void setConflictingCourses(HashSet<Course> conflictingCourses) {
         this.conflictingCourses = conflictingCourses;
     }
 

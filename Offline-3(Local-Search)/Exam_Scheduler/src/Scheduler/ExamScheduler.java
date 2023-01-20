@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class ExamScheduler {
-    private static int examScheduling(ArrayList<Course> courses) {
+    public static int examScheduling(ArrayList<Course> courses) {
         int totalTimeSlot = 0;
         int sz = courses.size();
         for(int i = 0; i < sz; i++) {
