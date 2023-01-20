@@ -63,18 +63,8 @@ public class LatinSquareSolver {
 
     private boolean backtracking(boolean isForwardChecking) {
         nodeVisited++;
-//        System.out.println("-------------------");
-//        printResult();
-//        System.out.println("-------------------");
         boolean isSolved = true;
 
-        // Checking whether all unassigned cells have got value. If yes, then solved, else not.
-//        for(Cell cell: unassignedCells) {
-//            if(cell.getValue() == 0) { // Unassigned cell remaining
-//                isSolved = false;
-//                break;
-//            }
-//        }
         if(assignedValues != order*order){
             isSolved = false;
         }
@@ -151,7 +141,7 @@ public class LatinSquareSolver {
     private void printResult() {
         for(int i=0;i<latinSquare.length;i++){
             for(int j=0;j<latinSquare[0].length;j++){
-                System.out.print(latinSquare[i][j].getValue()+ " ");
+                System.out.print(latinSquare[i][j].getValue()+ ", ");
             }
             System.out.println();
         }

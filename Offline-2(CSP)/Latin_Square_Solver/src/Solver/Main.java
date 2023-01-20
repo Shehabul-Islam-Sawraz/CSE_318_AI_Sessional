@@ -18,11 +18,8 @@ public class Main {
         File folder = new File("input_data");
         String[] files = folder.list();
         for(int index=0; index< files.length; index++){
-            for(int varHeuristic=1; varHeuristic<=4; varHeuristic++){
+            for(int varHeuristic=1; varHeuristic<=5; varHeuristic++){
                 for(int typeOfCheck=1; typeOfCheck<=2; typeOfCheck++){
-                    if(varHeuristic==2){
-                        continue;
-                    }
                     int order = -1;
                     Cell[][] latinSquare = null;
                     ArrayList<Cell> assignedCells = new ArrayList<>();
