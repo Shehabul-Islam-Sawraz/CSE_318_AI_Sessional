@@ -1,6 +1,7 @@
 package Scheduler;
 
 import Utils.Course;
+import Utils.Student;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,5 +36,15 @@ public class ExamScheduler {
             }
         }
         return totalTimeSlot;
+    }
+
+    public static double calculateAvgPenalty(ArrayList<Student> students) {
+        double avg_penalty = 0;
+        int sz = students.size();
+        for(int i = 0; i < sz; i++) {
+            avg_penalty += students.get(i).getStudentPenalty(false);
+        }
+        avg_penalty = avg_penalty/ (sz*1.0);
+        return avg_penalty;
     }
 }

@@ -64,6 +64,7 @@ public class ScheduleSolver {
             while (courses.get(maxIndex).getTimeSlot() == -1) {
                 if(!selected.contains(suitableSlot)) {
                     courses.get(maxIndex).setTimeSlot(suitableSlot);
+                    courses.get(maxIndex).updateDegreeSaturation();
                     if(suitableSlot == totalSlot) {
                         totalSlot++;
                     }
@@ -77,6 +78,13 @@ public class ScheduleSolver {
     }
 
     private int scheduleByRandomOrdering() {
+        int sz = students.size();
+        for(int i=0; i<sz; i++) {
+            HashSet<Course> courseArrayList = students.get(i).getEnrolledCourses();
+            for(Course course : courseArrayList) {
+                course.setConflict(course.getConflict()+(courseArrayList.size()==1? 0: 1));
+            }
+        }
         Collections.sort(courses, new LargestConflictFirst());
         return ExamScheduler.examScheduling(courses);
     }
