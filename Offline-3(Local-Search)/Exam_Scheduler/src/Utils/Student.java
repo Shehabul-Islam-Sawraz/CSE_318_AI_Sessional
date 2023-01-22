@@ -55,7 +55,7 @@ public class Student {
                 }
             }
         }
-        System.out.println("Penalty: " + penalty);
+        //System.out.println("Penalty: " + penalty);
         return penalty;
     }
 }

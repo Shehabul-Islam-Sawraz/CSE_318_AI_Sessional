@@ -6,11 +6,14 @@ import Utils.Student;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
 
     private static void scheduler(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic){
+        ScheduleSolver scheduleSolver = new ScheduleSolver(courses, students, constructiveHeuristic);
+        scheduleSolver.solve();
 
     }
 
@@ -46,8 +49,13 @@ public class Main {
             /* adding to enrolledCourses */
             Student student = new Student(student_count + 1);
             int tempLen = temp.length;
+            //System.out.println(tempLen);
             for(int i=0; i<tempLen; i++) {
                 //students.get(student_count).addEnrolledCourse(courses.get(tempInteger[i]-1));
+                if(Objects.equals(temp[i], "")) {
+                    //System.out.println(student_count + " " + tempLen);
+                    continue;
+                }
                 student.addEnrolledCourse(courses.get(Integer.parseInt(temp[i]) - 1));
             }
             students.add(student);
@@ -73,14 +81,18 @@ public class Main {
 
         // Calling scheduler
         System.out.println("====================================");
-        System.out.println("For file: " + fileName);
+        System.out.println("For file: " + fileName + "\n Constructive Heuristic: " + constructiveHeuristic);
         scheduler(courses, students, constructiveHeuristic);
         System.out.println("====================================\n\n");
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        for(int constructiveHeuristic = 0; constructiveHeuristic < 4; constructiveHeuristic++){
-            runInputFiles("abc", constructiveHeuristic);
+        for(int constructiveHeuristic = 1; constructiveHeuristic <= 4; constructiveHeuristic++){
+            //runInputFiles("car-f-92", constructiveHeuristic);
+            runInputFiles("car-s-91", constructiveHeuristic);
+            //runInputFiles("kfu-s-93", constructiveHeuristic);
+            //runInputFiles("tre-s-92", constructiveHeuristic);
+            //runInputFiles("yor-f-83", constructiveHeuristic);
         }
     }
 

@@ -10,8 +10,8 @@ import java.util.Random;
 public class KempeChainInterchange implements PerburtiveHeuristic{
     @Override
     public void doPenaltyReduction(ArrayList<Course> courses, ArrayList<Student> students) {
-        for(int i=0; i<1000; i++){
-            Random random = new Random(System.currentTimeMillis());
+        Random random = new Random(System.currentTimeMillis());
+        for(int i=0; i<50; i++){
             int current = random.nextInt(courses.size());
             Course c1 = courses.get(current);
             for(Course c2 : c1.getConflictingCourses()){

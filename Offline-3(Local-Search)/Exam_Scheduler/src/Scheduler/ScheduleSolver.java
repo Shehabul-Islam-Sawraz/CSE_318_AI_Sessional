@@ -3,6 +3,8 @@ package Scheduler;
 import ConstructiveHeuristics.LargestConflictFirst;
 import ConstructiveHeuristics.LargestDegreeFirst;
 import ConstructiveHeuristics.LargestEnrollmentFirst;
+import PerburtiveHeuristics.KempeChainInterchange;
+import PerburtiveHeuristics.PairSwapOperator;
 import Utils.Course;
 import Utils.Student;
 
@@ -16,16 +18,33 @@ import Scheduler.ExamScheduler;
 public class ScheduleSolver {
     private ArrayList<Course> courses;
     private ArrayList<Student> students;
-    private int perturbativeHeuristic;
     private int constructiveHeuristic;
     //private ExamScheduler examScheduler;
+    KempeChainInterchange chainInterchange;
+    PairSwapOperator swapOperator;
 
-    public ScheduleSolver(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic, int perturbativeHeuristic) {
+    public ScheduleSolver(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic) {
         this.courses = courses;
         this.students = students;
         //examScheduler = new ExamScheduler();
         this.constructiveHeuristic = constructiveHeuristic;
-        this.perturbativeHeuristic = perturbativeHeuristic;
+        chainInterchange = new KempeChainInterchange();
+        swapOperator = new PairSwapOperator();
+    }
+
+    private int chooseScheduler() {
+        switch (constructiveHeuristic) {
+            case 1:
+                return scheduleByLargestDegree();
+            case 2:
+                return scheduleBySaturationDegree();
+            case 3:
+                return scheduleByLargestEnrollment();
+            case 4:
+                return scheduleByRandomOrdering();
+            default:
+                return 0;
+        }
     }
 
     private int scheduleByLargestDegree() {
@@ -91,7 +110,15 @@ public class ScheduleSolver {
 
     public void solve() {
         long runtime = System.currentTimeMillis();
-        // boolean isSolved = chooseSolver();
+        int totalSlot = chooseScheduler();
+        System.out.println("Total Slot Required: " + totalSlot);
+        System.out.println("Average Penalty: " + ExamScheduler.calculateAvgPenalty(students));
+
+        chainInterchange.doPenaltyReduction(courses, students);
+        System.out.println("After KempeChainInterchange Average Penalty: " + ExamScheduler.calculateAvgPenalty(students));
+
+        swapOperator.doPenaltyReduction(courses, students);
+        System.out.println("After PairSwapOperator Average Penalty: " + ExamScheduler.calculateAvgPenalty(students));
         runtime = System.currentTimeMillis() - runtime;
     }
 }
