@@ -26,7 +26,6 @@ public class ScheduleSolver {
     public ScheduleSolver(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic) {
         this.courses = courses;
         this.students = students;
-        //examScheduler = new ExamScheduler();
         this.constructiveHeuristic = constructiveHeuristic;
         chainInterchange = new KempeChainInterchange();
         swapOperator = new PairSwapOperator();

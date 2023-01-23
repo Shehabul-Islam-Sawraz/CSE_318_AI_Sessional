@@ -52,7 +52,6 @@ public class PairSwapOperator implements PerburtiveHeuristic{
         Random random = new Random(System.currentTimeMillis());
         for(int i=0; i<3000; i++) {
             Course c1 = courses.get(random.nextInt(courses.size()));
-            //random = new Random(System.currentTimeMillis());
             Course c2 = courses.get(random.nextInt(courses.size()));
 
             if(c1.getTimeSlot() == c2.getTimeSlot()){

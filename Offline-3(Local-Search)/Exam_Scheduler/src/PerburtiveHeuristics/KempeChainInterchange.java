@@ -15,15 +15,6 @@ public class KempeChainInterchange implements PerburtiveHeuristic{
             int current = random.nextInt(courses.size());
             Course c1 = courses.get(current);
             ArrayList<Course> conflictingCourses = new ArrayList<>(c1.getConflictingCourses());
-//            for(Course c2 : c1.getConflictingCourses()){
-//                KempeChain kempeChain = new KempeChain(c1, c2);
-//                double prev_penalty = ExamScheduler.calculateAvgPenalty(students);
-//                kempeChain.interchangeTimeSlots();
-//                double new_penalty = ExamScheduler.calculateAvgPenalty(students);
-//                if(new_penalty > prev_penalty) {
-//                    kempeChain.interchangeTimeSlots();
-//                }
-//            }
             if(conflictingCourses.size() == 0) {
                 continue;
             }

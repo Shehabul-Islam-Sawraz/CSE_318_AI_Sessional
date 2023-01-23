@@ -29,15 +29,6 @@ public class Main {
         }
         scanner.close();
 
-        /* preparing conflict matrix */
-        int coursesSize = courses.size();
-//        boolean[][] conflictMatrix = new boolean[coursesSize][coursesSize];
-//        for(int i=0; i<coursesSize; i++) {
-//            for(int j=0; j<coursesSize; j++) {
-//                conflictMatrix[i][j] = false;
-//            }
-//        }
-
         /* extracting input from .stu file */
         int student_count = 0;
         scanner = new Scanner(new File("input_data/"+fileName+".stu"));
@@ -48,11 +39,8 @@ public class Main {
             /* adding to enrolledCourses */
             Student student = new Student(student_count + 1);
             int tempLen = temp.length;
-            //System.out.println(tempLen);
             for(int i=0; i<tempLen; i++) {
-                //students.get(student_count).addEnrolledCourse(courses.get(tempInteger[i]-1));
                 if(Objects.equals(temp[i], "")) {
-                    //System.out.println(student_count + " " + tempLen);
                     continue;
                 }
                 student.addEnrolledCourse(courses.get(Integer.parseInt(temp[i]) - 1));
@@ -65,12 +53,6 @@ public class Main {
                 int x = Integer.parseInt(temp[i]);
                 for(int j=i+1; j<tempLen; j++) {
                     int y = Integer.parseInt(temp[j]);
-//                    if(!conflictMatrix[x - 1][y - 1]) {
-//                        conflictMatrix[x-1][y-1] = conflictMatrix[y-1][x-1] = true;
-//
-//                        courses.get(x-1).addConflictingCourse(courses.get(y-1));
-//                        courses.get(y-1).addConflictingCourse(courses.get(x-1));
-//                    }
                     courses.get(x-1).addConflictingCourse(courses.get(y-1));
                     courses.get(y-1).addConflictingCourse(courses.get(x-1));
                 }

@@ -48,7 +48,6 @@ public class KempeChain {
     private boolean hasOneCourse() {
         // This checks if there are only one member in the Kempe Chain or not!
         return hashSet1.size()==1 && hashSet2.size()==0;
-        //return hashSet2.size()==0;
     }
 
     public boolean isPairSwappable(KempeChain chain) {
