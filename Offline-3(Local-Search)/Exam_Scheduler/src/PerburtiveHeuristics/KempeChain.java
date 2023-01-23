@@ -13,8 +13,8 @@ public class KempeChain {
     public KempeChain(Course course1, Course course2) {
         this.hashSet1 = new HashSet<>();
         this.hashSet2 = new HashSet<>();
-        this.timeSlot1 = course1.getTimeSlot();
-        this.timeSlot2 = course2.getTimeSlot();
+        this.timeSlot1 = course1.getTimeSlot(); // 1
+        this.timeSlot2 = course2.getTimeSlot(); // 5
 
         createChain(course1);
     }

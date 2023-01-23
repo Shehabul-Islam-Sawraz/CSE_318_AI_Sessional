@@ -60,7 +60,7 @@ public class PairSwapOperator implements PerburtiveHeuristic{
                 continue;
             }
 
-            KempeChain kempeChain1 = new KempeChain(c1, c2);
+            /*KempeChain kempeChain1 = new KempeChain(c1, c2);
             KempeChain kempeChain2 = new KempeChain(c2,c1);
 
             if(kempeChain1.isPairSwappable(kempeChain2)) {
@@ -70,11 +70,14 @@ public class PairSwapOperator implements PerburtiveHeuristic{
                 double new_penalty = ExamScheduler.calculateAvgPenalty(students);
 
                 if(new_penalty > prev_penalty) {
-                    kempeChain1.swapPair(kempeChain2);
+                    System.out.println("Age: " + ExamScheduler.calculateAvgPenalty(students));
+                    kempeChain2.swapPair(kempeChain1);
+                    System.out.println("Pore: " + ExamScheduler.calculateAvgPenalty(students));
+                    System.out.println("\n\n");
                 }
-            }
+            }*/
 
-            //doPairSwapOperator(students, c1, c2);
+            doPairSwapOperator(students, c1, c2);
         }
         System.out.println("Penalty Reduction tried: " + penaltyReduction + " times");
         System.out.println("Same slot: " + sameSlot);

@@ -14,7 +14,6 @@ public class Main {
     private static void scheduler(ArrayList<Course> courses, ArrayList<Student> students, int constructiveHeuristic){
         ScheduleSolver scheduleSolver = new ScheduleSolver(courses, students, constructiveHeuristic);
         scheduleSolver.solve();
-
     }
 
     private static void runInputFiles(String fileName, int constructiveHeuristic) throws FileNotFoundException {
@@ -87,12 +86,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        for(int constructiveHeuristic = 1; constructiveHeuristic <= 4; constructiveHeuristic++){
-            //runInputFiles("car-f-92", constructiveHeuristic);
+        for (int constructiveHeuristic = 1; constructiveHeuristic <= 4; constructiveHeuristic++) {
+            runInputFiles("car-f-92", constructiveHeuristic);
             runInputFiles("car-s-91", constructiveHeuristic);
-            //runInputFiles("kfu-s-93", constructiveHeuristic);
-            //runInputFiles("tre-s-92", constructiveHeuristic);
-            //runInputFiles("yor-f-83", constructiveHeuristic);
+            runInputFiles("kfu-s-93", constructiveHeuristic);
+            runInputFiles("tre-s-92", constructiveHeuristic);
+            runInputFiles("yor-f-83", constructiveHeuristic);
         }
     }
 
