@@ -229,7 +229,7 @@ class MinesweeperAI():
         #Loop over the neighbours of current cell
         for neighbor in neighbor_cells:
             x, y = neighbor
-            
+            #print(f'X is: {x} and Y is {y}')
             # Ignore the cell itself
             if (x, y) == cell:
                 continue
@@ -245,7 +245,7 @@ class MinesweeperAI():
 
             # Otherwise add it to sentence if it is in the game board
             if 0 <= x < self.height and 0 <= y < self.width:
-                neighbors.add((i, j))
+                neighbors.add((x, y))
         
         # 3. Add the new sentence to the AI's Knowledge Base
         # based on the value of `cell` and `count`

@@ -12,6 +12,8 @@ MINES = 8
 BLACK = (0, 0, 0)
 GRAY = (180, 180, 180)
 WHITE = (255, 255, 255)
+PINK = (255, 192, 203)
+RED = (255, 0, 0)
 
 # Create game
 pygame.init()
@@ -36,6 +38,11 @@ flag = pygame.image.load("assets/images/flag.png")
 flag = pygame.transform.scale(flag, (cell_size, cell_size))
 mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
+mine_red = pygame.image.load("assets/images/mine-red.png")
+mine_red = pygame.transform.scale(mine_red, (cell_size, cell_size))
+
+# Detonated mine
+mine_detonated = None
 
 # Create game and AI agent
 game = Minesweeper(height=HEIGHT, width=WIDTH, mines=MINES)
@@ -48,6 +55,12 @@ lost = False
 
 # Show instructions initially
 instructions = True
+
+# Autoplay game
+autoplay = False
+autoplaySpeed = 0.3
+makeAiMove = False
+
 
 while True:
 
@@ -115,7 +128,10 @@ while True:
 
             # Add a mine, flag, or number if needed
             if game.is_mine((i, j)) and lost:
-                screen.blit(mine, rect)
+                if (i,j) == mine_detonated:
+                    screen.blit(mine_red, rect)
+                else:
+                    screen.blit(mine, rect)
             elif (i, j) in flags:
                 screen.blit(flag, rect)
             elif (i, j) in revealed:
@@ -126,9 +142,26 @@ while True:
                 neighborsTextRect = neighbors.get_rect()
                 neighborsTextRect.center = rect.center
                 screen.blit(neighbors, neighborsTextRect)
-
+            # elif (i, j) in ai.safes and showInference:
+            #     pygame.draw.rect(screen, PINK, rect)
+            #     pygame.draw.rect(screen, WHITE, rect, 3)
+            # elif (i, j) in ai.mines and showInference:
+            #     pygame.draw.rect(screen, RED, rect)
+            #     pygame.draw.rect(screen, WHITE, rect, 3)
             row.append(rect)
         cells.append(row)
+
+    # Autoplay Button
+    autoplayBtn = pygame.Rect(
+        (2 / 3) * width + BOARD_PADDING, BOARD_PADDING,
+        (width / 3) - BOARD_PADDING * 2, 50
+    )
+    bText = "Autoplay" if not autoplay else "Stop"
+    buttonText = mediumFont.render(bText, True, BLACK)
+    buttonRect = buttonText.get_rect()
+    buttonRect.center = autoplayBtn.center
+    pygame.draw.rect(screen, WHITE, autoplayBtn)
+    screen.blit(buttonText, buttonRect)
 
     # AI Move button
     aiButton = pygame.Rect(
@@ -138,8 +171,9 @@ while True:
     buttonText = mediumFont.render("AI Move", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = aiButton.center
-    pygame.draw.rect(screen, WHITE, aiButton)
-    screen.blit(buttonText, buttonRect)
+    if not autoplay:
+        pygame.draw.rect(screen, WHITE, aiButton)
+        screen.blit(buttonText, buttonRect)
 
     # Reset button
     resetButton = pygame.Rect(
@@ -149,8 +183,9 @@ while True:
     buttonText = mediumFont.render("Reset", True, BLACK)
     buttonRect = buttonText.get_rect()
     buttonRect.center = resetButton.center
-    pygame.draw.rect(screen, WHITE, resetButton)
-    screen.blit(buttonText, buttonRect)
+    if not autoplay:
+        pygame.draw.rect(screen, WHITE, resetButton)
+        screen.blit(buttonText, buttonRect)
 
     # Display text
     text = "Lost" if lost else "Won" if game.mines == flags else ""
@@ -158,13 +193,26 @@ while True:
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height)
     screen.blit(text, textRect)
+    
+    # Show Safes and Mines button
+    # safesMinesButton = pygame.Rect(
+    #     (2 / 3) * width + BOARD_PADDING, BOARD_PADDING + 280,
+    #     (width / 3) - BOARD_PADDING * 2, 50
+    # )
+    # bText = "Show Inference" if not showInference else "Hide Inference"
+    # buttonText = smallFont.render(bText, True, BLACK)
+    # buttonRect = buttonText.get_rect()
+    # buttonRect.center = safesMinesButton.center
+    # if not autoplay:
+    #     pygame.draw.rect(screen, WHITE, safesMinesButton)
+    #     screen.blit(buttonText, buttonRect)
 
     move = None
 
     left, _, right = pygame.mouse.get_pressed()
 
     # Check for a right-click to toggle flagging
-    if right == 1 and not lost:
+    if right == 1 and not lost and not autoplay:
         mouse = pygame.mouse.get_pos()
         for i in range(HEIGHT):
             for j in range(WIDTH):
@@ -178,18 +226,18 @@ while True:
     elif left == 1:
         mouse = pygame.mouse.get_pos()
 
-        # If AI button clicked, make an AI move
-        if aiButton.collidepoint(mouse) and not lost:
-            move = ai.make_safe_move()
-            if move is None:
-                move = ai.make_random_move()
-                if move is None:
-                    flags = ai.mines.copy()
-                    print("No moves left to make.")
-                else:
-                    print("No known safe moves, AI making random move.")
+        # If Autoplay button clicked, toggle autoplay
+        if autoplayBtn.collidepoint(mouse):
+            if not lost:
+                autoplay = not autoplay
             else:
-                print("AI making safe move.")
+                autoplay = False
+            time.sleep(0.2)
+            continue
+
+        # If AI button clicked, make an AI move
+        elif aiButton.collidepoint(mouse) and not lost:
+            makeAiMove = True
             time.sleep(0.2)
 
         # Reset game state
@@ -199,7 +247,13 @@ while True:
             revealed = set()
             flags = set()
             lost = False
+            mine_detonated = None
             continue
+
+        # If Inference button clicked, toggle showInference
+        # elif safesMinesButton.collidepoint(mouse):
+        #     showInference = not showInference
+        #     time.sleep(0.2)
 
         # User-made move
         elif not lost:
@@ -210,10 +264,32 @@ while True:
                             and (i, j) not in revealed):
                         move = (i, j)
 
+    # If autoplay, make move with AI
+    if autoplay or makeAiMove:
+        if makeAiMove:
+            makeAiMove = False
+        move = ai.make_safe_move()
+        if move is None:
+            move = ai.make_random_move()
+            if move is None:
+                flags = ai.mines.copy()
+                print("No moves left to make.")
+                autoplay = False
+            else:
+                print(f'No known safe moves, AI making random move at cell ({move[0], move[1]})')
+        else:
+            print("AI making safe move.")
+
+        # Add delay for autoplay
+        if autoplay:
+            time.sleep(autoplaySpeed)
+
     # Make move and update AI knowledge
     if move:
         if game.is_mine(move):
             lost = True
+            mine_detonated = move
+            autoplay = False
         else:
             nearby = game.nearby_mines(move)
             revealed.add(move)
