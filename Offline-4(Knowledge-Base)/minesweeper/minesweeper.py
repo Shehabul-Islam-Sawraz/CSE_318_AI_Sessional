@@ -311,7 +311,6 @@ class MinesweeperAI():
             for sentence_2 in self.knowledge:
                 # Ignore when sentences are identical
                 if sentence_1.cells == sentence_2.cells:
-                    self.knowledge.remove(sentence_2)
                     continue
 
                 if sentence_1.cells == set() and sentence_1.count > 0:
