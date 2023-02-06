@@ -142,12 +142,6 @@ while True:
                 neighborsTextRect = neighbors.get_rect()
                 neighborsTextRect.center = rect.center
                 screen.blit(neighbors, neighborsTextRect)
-            # elif (i, j) in ai.safes and showInference:
-            #     pygame.draw.rect(screen, PINK, rect)
-            #     pygame.draw.rect(screen, WHITE, rect, 3)
-            # elif (i, j) in ai.mines and showInference:
-            #     pygame.draw.rect(screen, RED, rect)
-            #     pygame.draw.rect(screen, WHITE, rect, 3)
             row.append(rect)
         cells.append(row)
 
@@ -193,19 +187,6 @@ while True:
     textRect = text.get_rect()
     textRect.center = ((5 / 6) * width, (2 / 3) * height)
     screen.blit(text, textRect)
-    
-    # Show Safes and Mines button
-    # safesMinesButton = pygame.Rect(
-    #     (2 / 3) * width + BOARD_PADDING, BOARD_PADDING + 280,
-    #     (width / 3) - BOARD_PADDING * 2, 50
-    # )
-    # bText = "Show Inference" if not showInference else "Hide Inference"
-    # buttonText = smallFont.render(bText, True, BLACK)
-    # buttonRect = buttonText.get_rect()
-    # buttonRect.center = safesMinesButton.center
-    # if not autoplay:
-    #     pygame.draw.rect(screen, WHITE, safesMinesButton)
-    #     screen.blit(buttonText, buttonRect)
 
     move = None
 
@@ -249,11 +230,6 @@ while True:
             lost = False
             mine_detonated = None
             continue
-
-        # If Inference button clicked, toggle showInference
-        # elif safesMinesButton.collidepoint(mouse):
-        #     showInference = not showInference
-        #     time.sleep(0.2)
 
         # User-made move
         elif not lost:

@@ -62,21 +62,7 @@ class Minesweeper():
         # Keep count of nearby mines
         count = 0
 
-        # Loop over all cells within one row and column
-        """
-        for i in range(cell[0] - 1, cell[0] + 2):
-            for j in range(cell[1] - 1, cell[1] + 2):
-
-                # Ignore the cell itself
-                if (i, j) == cell:
-                    continue
-
-                # Update count if cell in bounds and is mine
-                if 0 <= i < self.height and 0 <= j < self.width:
-                    if self.board[i][j]:
-                        count += 1
-        """
-                        
+        # Loop over all cells within one row and column       
         for i in range(cell[0] - 1, cell[0] + 2):
             # Ignore the cell itself
             if (i, cell[1]) == cell:
@@ -229,7 +215,6 @@ class MinesweeperAI():
         #Loop over the neighbours of current cell
         for neighbor in neighbor_cells:
             x, y = neighbor
-            #print(f'X is: {x} and Y is {y}')
             # Ignore the cell itself
             if (x, y) == cell:
                 continue
@@ -362,13 +347,6 @@ class MinesweeperAI():
             return None
 
         # Loop until an appropriate move is found
-        """
-        while True:
-            i = random.randrange(self.height)
-            j = random.randrange(self.width)
-            if (i, j) not in self.moves_made and (i, j) not in self.mines:
-                return (i, j)
-        """
         all_moves = set()
         for i in range(self.height):
             for j in range(self.width):
